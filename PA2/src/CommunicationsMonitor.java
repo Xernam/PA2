@@ -9,7 +9,7 @@ public class CommunicationsMonitor {
 	
 	//Constructor with no parameters
 	public CommunicationsMonitor() {
-		graph
+		graph = null;
 	}
 	
 	
@@ -38,6 +38,7 @@ public class CommunicationsMonitor {
 //	If so, the method returns an ordered list of ComputerNode objects that represents the transmission sequence. 
 //	This sequence is a path in graph G. The first ComputerNodeobject on the path will correspond to c1. 
 //	Similarly, the last ComputerNodeobject on the path will correspond to c2. If c2 cannot be infected, return null.
+//  O(m)	
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
 		return null;
 	}
@@ -51,7 +52,7 @@ public class CommunicationsMonitor {
 //	represented by ComputerNode objects, that specify that Ci has communicated with other computers at times t1,t2,...,tk. 
 //	The list for each computer must be ordered by time; i.e.,t1<t2<···<tk
 	public HashMap<Integer, List<ComputerNode>> getComputerMapping(){
-		return null;
+		return graph;
 	}
 	
 	
@@ -59,6 +60,8 @@ public class CommunicationsMonitor {
 	
 //	Returns the list of ComputerNodeobjects associated with computer c by performing a lookup in the mapping.
 	public List<ComputerNode> getComputerMapping(int c){
+		if(graph != null)
+			return graph.get(c);
 		return null;
 	}
 }

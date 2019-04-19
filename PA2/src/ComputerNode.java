@@ -9,7 +9,6 @@ public class ComputerNode {
 	public ComputerNode(int id, int time) {
 		ID = id;
 		timestamp = time;
-		neighbors = new List<ComputerNode>();
 	}
 	
 	
