@@ -3,9 +3,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CommunicationsMonitor {
+	
+	private HashMap<Integer, List<ComputerNode>> graph;
+	
+	
 	//Constructor with no parameters
 	public CommunicationsMonitor() {
-		
+		graph
 	}
 	
 	
@@ -16,6 +20,8 @@ public class CommunicationsMonitor {
 //	This method should run in O(1)time. 
 //	Any invocation of this method after createGraph() is called will be ignored.
 	public void addCommunication(int c1, int c2, int timestamp) {
+		if(graph != null)
+			return;
 		
 	}
 	
