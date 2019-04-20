@@ -1,9 +1,12 @@
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 public class CommunicationsMonitor {
 	
+	private List<ComputerTriple> tripleList;
 	private HashMap<Integer, List<ComputerNode>> graph;
 	
 	
@@ -22,13 +25,41 @@ public class CommunicationsMonitor {
 	public void addCommunication(int c1, int c2, int timestamp) {
 		if(graph != null)
 			return;
-		
+		ComputerNode temp1 = new ComputerNode(c1, timestamp);
+		ComputerNode temp2 = new ComputerNode(c2, timestamp);
+		ComputerTriple triple = new ComputerTriple(temp1, temp2, timestamp);
+		tripleList.add(triple);
 	}
 	
 	
 //	Constructs the data structure as specified in the Section 2. 
 //	This method should run in O(n+mlogm) time.
 	public void createGraph() {
+		tripleList.sort(new TripleComparator());
+		graph = new HashMap<Integer, List<ComputerNode>>();
+		for(int i = 0; i < tripleList.size(); i++) {
+			ComputerTriple tempTriple = tripleList.get(i);
+			tempTriple.getC1().getOutNeighbors().add(tempTriple.getC2());
+			tempTriple.getC2().getOutNeighbors().add(tempTriple.getC1());
+			if(graph.get(tempTriple.getTimestamp()) != null) {
+				List<ComputerNode> tempList = graph.get(tempTriple.getTimestamp());
+				for(int j = 0; j < tempList.size(); j++) {
+					ComputerNode tempC = tempList.get(j);
+					tempTriple.getC1().getOutNeighbors().add(tempC);
+					tempTriple.getC2().getOutNeighbors().add(tempC);
+					tempC.getOutNeighbors().add(tempTriple.getC1());
+					tempC.getOutNeighbors().add(tempTriple.getC2());
+				}
+				tempList.add(tempTriple.getC1());
+				tempList.add(tempTriple.getC2());
+			}
+			else {
+				List<ComputerNode> tempList = new ArrayList<ComputerNode>();
+				tempList.add(tempTriple.getC1());
+				tempList.add(tempTriple.getC2());
+				graph.put(tempTriple.getTimestamp(), tempList);
+			}
+		}
 		
 	}
 	
@@ -63,5 +94,19 @@ public class CommunicationsMonitor {
 		if(graph != null)
 			return graph.get(c);
 		return null;
+	}
+	
+	class TripleComparator implements Comparator<ComputerTriple>{
+
+		@Override
+		public int compare(ComputerTriple c1, ComputerTriple c2) {
+			if(c1.getTimestamp() < c2.getTimestamp())
+				return -1;
+			else if (c1.getTimestamp() > c2.getTimestamp())
+				return 1;
+			else
+				return 0;
+		}
+		
 	}
 }

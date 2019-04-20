@@ -28,4 +28,10 @@ public class ComputerNode {
 	public List<ComputerNode> getOutNeighbors(){
 		return neighbors;
 	}
+	
+	public boolean equals(ComputerNode c) {
+		if(this.ID == c.getID() && this.timestamp == c.getTimestamp())
+			return true;
+		return false;
+	}
 }
