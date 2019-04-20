@@ -91,9 +91,16 @@ public class CommunicationsMonitor {
 				break;
 		}
 		
-		
 		if(graph.get(y) != null) {
-			DFS(this.graph, c1, c2, x, y);
+			ComputerNode tempC2 = null;
+			for(int i = 0; i < graph.get(y).size(); i++) {
+				if(graph.get(y).get(i).getID() == c2)
+					tempC2 = graph.get(y).get(i);
+			}
+			if(tempC2 == null || tempC2.getTimestamp() > y)
+				return null;
+			
+			return DFS(this.graph, node, tempC2, x, y);
 		}
 		return null;
 	}
@@ -120,9 +127,16 @@ public class CommunicationsMonitor {
 		return null;
 	}
 	
-	private List<ComputerNode> DFS(HashMap graph, int c1, int c2, int x, int y) {
+	private List<ComputerNode> DFS(HashMap graph, ComputerNode c1, ComputerNode c2, int x, int y) {
 		
-		return null;
+		List<ComputerNode> path = new ArrayList<ComputerNode>();
+		path.add(c1);
+		return DFSVisit(graph, c1, c2, x, y, path);
+	}
+	
+	private List<ComputerNode> DFSVisit(HashMap graph, ComputerNode c1, ComputerNode c2, int x, int y, List<ComputerNode> path){
+		
+		return path;
 	}
 	
 	private
