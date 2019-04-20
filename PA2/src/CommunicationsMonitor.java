@@ -100,7 +100,7 @@ public class CommunicationsMonitor {
 			if(tempC2 == null || tempC2.getTimestamp() > y)
 				return null;
 			
-			return DFS(this.graph, node, tempC2, x, y);
+			return DFS(node, tempC2, x, y);
 		}
 		return null;
 	}
@@ -127,14 +127,28 @@ public class CommunicationsMonitor {
 		return null;
 	}
 	
-	private List<ComputerNode> DFS(HashMap graph, ComputerNode c1, ComputerNode c2, int x, int y) {
+	/**
+	 * performs a DFS search on a graph, using c1 as a starting point and searching for c2.
+	 * returns a list of nodes, signifying the path used to reach c2. If c2 is not found,
+	 * this method returns null;
+	 * @param graph
+	 * @param c1
+	 * @param c2
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	private List<ComputerNode> DFS(ComputerNode c1, ComputerNode c2, int x, int y) {
 		
 		List<ComputerNode> path = new ArrayList<ComputerNode>();
 		path.add(c1);
-		return DFSVisit(graph, c1, c2, x, y, path);
+		path = DFSVisit(c1, c2, x, y, path);
+		if(!path.get(path.size()- 1 ).equals(c2))
+			return null;
+		return path;
 	}
 	
-	private List<ComputerNode> DFSVisit(HashMap graph, ComputerNode c1, ComputerNode c2, int x, int y, List<ComputerNode> path){
+	private List<ComputerNode> DFSVisit(ComputerNode c1, ComputerNode c2, int x, int y, List<ComputerNode> path){
 		
 		return path;
 	}
