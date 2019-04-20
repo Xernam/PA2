@@ -30,7 +30,7 @@ public class ComputerNode {
 	}
 	
 	public boolean equals(ComputerNode c) {
-		if(this.ID == c.getID() && this.timestamp == c.getTimestamp())
+		if(this.ID == c.getID())
 			return true;
 		return false;
 	}

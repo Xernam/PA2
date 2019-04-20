@@ -12,6 +12,7 @@ public class CommunicationsMonitor {
 	
 	//Constructor with no parameters
 	public CommunicationsMonitor() {
+		tripleList = new ArrayList<ComputerTriple>();
 		graph = null;
 	}
 	
@@ -58,6 +59,13 @@ public class CommunicationsMonitor {
 				tempList.add(tempTriple.getC1());
 				tempList.add(tempTriple.getC2());
 				graph.put(tempTriple.getTimestamp(), tempList);
+			}
+			for(int j = 0; j < i; j++) {
+				ComputerTriple triple = tripleList.get(j);
+				if(triple.getC1().equals(tempTriple.getC1()))
+					tempTriple.getC1().getOutNeighbors().add(triple.getC1());
+				if(triple.getC2().equals(tempTriple.getC2()))
+					tempTriple.getC2().getOutNeighbors().add(triple.getC2());
 			}
 		}
 		
