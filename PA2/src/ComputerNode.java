@@ -5,10 +5,12 @@ public class ComputerNode {
 	private int ID;
 	private int timestamp;
 	private List<ComputerNode> neighbors;
+	private int color; // 0 for white, 1 for grey, 2 for black
 	
 	public ComputerNode(int id, int time) {
 		ID = id;
 		timestamp = time;
+		setColor(0);
 	}
 	
 	
@@ -29,6 +31,23 @@ public class ComputerNode {
 		return neighbors;
 	}
 	
+	/**
+	 * @return the color
+	 */
+	public int getColor() {
+		return color;
+	}
+	
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(int color) {
+		this.color = color;
+	}
+
+
+
+
 	public boolean equals(ComputerNode c) {
 		if(this.ID == c.getID())
 			return true;

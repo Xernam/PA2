@@ -79,6 +79,22 @@ public class CommunicationsMonitor {
 //	Similarly, the last ComputerNodeobject on the path will correspond to c2. If c2 cannot be infected, return null.
 //  O(m)	
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
+		List<ComputerNode> xArr = graph.get(x);
+		if(xArr == null)
+			return null;
+		ComputerNode node = null;
+		for(int i = 0; i < xArr.size(); i++) {
+			node = xArr.get(i);
+			if(node.getID() == c1 && node.getTimestamp() > x)
+				return null;
+			else if(node.getID() == c2 && node.getTimestamp() <= x)
+				break;
+		}
+		
+		
+		if(graph.get(y) != null) {
+			DFS(this.graph, c1, c2, x, y);
+		}
 		return null;
 	}
 	
@@ -100,9 +116,16 @@ public class CommunicationsMonitor {
 //	Returns the list of ComputerNodeobjects associated with computer c by performing a lookup in the mapping.
 	public List<ComputerNode> getComputerMapping(int c){
 		if(graph != null)
-			return graph.get(c);
+			return graph.get(c); //this is wrong because it will get time c, not computer c
 		return null;
 	}
+	
+	private List<ComputerNode> DFS(HashMap graph, int c1, int c2, int x, int y) {
+		
+		return null;
+	}
+	
+	private
 	
 	class TripleComparator implements Comparator<ComputerTriple>{
 
