@@ -79,6 +79,18 @@ public class CommunicationsMonitor {
 //	Similarly, the last ComputerNodeobject on the path will correspond to c2. If c2 cannot be infected, return null.
 //  O(m)	
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
+//		ComputerNode infectedNode = null;
+//		for(int i = x; i < y; i++) {
+//			List<ComputerNode> temp = graph.get(i);
+//			for(ComputerNode t : temp) {
+//				if(t.getID() == c1) {
+//					x = i;
+//					infectedNode = t;
+//					break;
+//				}
+//			}
+//			break;
+//		}
 		List<ComputerNode> xArr = graph.get(x);
 		if(xArr == null)
 			return null;
@@ -149,7 +161,10 @@ public class CommunicationsMonitor {
 	}
 	
 	private List<ComputerNode> DFSVisit(ComputerNode c1, ComputerNode c2, int x, int y, List<ComputerNode> path){
-		
+		c1.setColor(1);
+		for(int i = 0; i < c1.getOutNeighbors().size(); i++) {
+			ComputerNode temp = c1.getOutNeighbors().get(i);
+		}
 		return path;
 	}
 	
