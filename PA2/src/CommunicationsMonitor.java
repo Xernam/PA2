@@ -7,6 +7,7 @@ import java.util.List;
 public class CommunicationsMonitor {
 	
 	private List<ComputerTriple> tripleList;
+	private HashMap<ComputerNode, List<ComputerNode>> realGraph; // need to create a graph of this somehow
 	private HashMap<Integer, List<ComputerNode>> graph;
 	
 	
@@ -14,6 +15,7 @@ public class CommunicationsMonitor {
 	public CommunicationsMonitor() {
 		tripleList = new ArrayList<ComputerTriple>();
 		graph = null;
+		realGraph = null;
 	}
 	
 	
@@ -38,23 +40,45 @@ public class CommunicationsMonitor {
 	public void createGraph() {
 		tripleList.sort(new TripleComparator());
 		graph = new HashMap<Integer, List<ComputerNode>>();
+		realGraph = new HashMap<ComputerNode, List<ComputerNode>>();
+		
 		for(int i = 0; i < tripleList.size(); i++) {
 			ComputerTriple tempTriple = tripleList.get(i);
-			tempTriple.getC1().getOutNeighbors().add(tempTriple.getC2());
-			tempTriple.getC2().getOutNeighbors().add(tempTriple.getC1());
+			ComputerNode C1 = tempTriple.getC1();
+			ComputerNode C2 = tempTriple.getC2();
+			C1.getOutNeighbors().add(C2);
+			C2.getOutNeighbors().add(C1);
 			if(graph.get(tempTriple.getTimestamp()) != null) {
 				List<ComputerNode> tempList = graph.get(tempTriple.getTimestamp());
 				for(int j = 0; j < tempList.size(); j++) {
 					ComputerNode tempC = tempList.get(j);
-					tempTriple.getC1().getOutNeighbors().add(tempC);
-					tempTriple.getC2().getOutNeighbors().add(tempC);
-					tempC.getOutNeighbors().add(tempTriple.getC1());
-					tempC.getOutNeighbors().add(tempTriple.getC2());
+					C1.getOutNeighbors().add(tempC);
+					C2.getOutNeighbors().add(tempC);
+					tempC.getOutNeighbors().add(C1);
+					tempC.getOutNeighbors().add(C2);
 				}
-				tempList.add(tempTriple.getC1());
-				tempList.add(tempTriple.getC2());
+				tempList.add(C1);
+				tempList.add(C2);
 			}
-			else {
+			// Beginning work on the actual graph, represented with a hashmap. Currently have first 5 of 7 done
+			// in section 2. Might have to think about how to do this more, as im not entirely sure as to what
+			// I am doing for this. A possible solution would be to create a graph data type with a map of
+			// neighbors on the inside. Gonna look it over in the morning to see if a fresh brain will be able to work better
+			//		-Logan
+			
+			if(realGraph.get(C1) == null) {
+				realGraph.put(C1, new ArrayList<ComputerNode>());
+			}
+			if(realGraph.get(C2) == null) {
+				realGraph.put(C2, new ArrayList<ComputerNode>());
+			}
+			
+			realGraph.get(C1).add(C2);
+			realGraph.get(C2).add(C1);
+			realGraph.get(C1).add(C1);
+			realGraph.get(C2).add(C2);
+			
+			if(graph.get(tempTriple.getTimestamp()) == null) {
 				List<ComputerNode> tempList = new ArrayList<ComputerNode>();
 				tempList.add(tempTriple.getC1());
 				tempList.add(tempTriple.getC2());
@@ -168,8 +192,6 @@ public class CommunicationsMonitor {
 		return path;
 	}
 	
-	private
-	
 	class TripleComparator implements Comparator<ComputerTriple>{
 
 		@Override
@@ -183,4 +205,5 @@ public class CommunicationsMonitor {
 		}
 		
 	}
+		
 }
