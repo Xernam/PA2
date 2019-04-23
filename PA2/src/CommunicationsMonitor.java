@@ -43,61 +43,53 @@ public class CommunicationsMonitor {
 		//check the README, this is mostly just generating the two hash maps
 		//that are needed. This does need some work on it, I think
 		
-		tripleList.sort(new TripleComparator());
-		timestampGraph = new HashMap<Integer, List<ComputerNode>>();
+		tripleList.sort(new TripleComparator()); //sort the triples (step 1);
+		timestampGraph = new HashMap<Integer, List<ComputerNode>>(); //Creation of 2 maps, step 2.
 		nodeGraph = new HashMap<Integer, List<ComputerNode>>();
 		
-		for(int i = 0; i < tripleList.size(); i++) {
-			ComputerTriple tempTriple = tripleList.get(i);
-			ComputerNode C1 = tempTriple.getC1();
-			ComputerNode C2 = tempTriple.getC2();
-			C1.getOutNeighbors().add(C2);
-			C2.getOutNeighbors().add(C1);
-			if(timestampGraph.get(tempTriple.getTimestamp()) != null) {
-				List<ComputerNode> tempList = timestampGraph.get(tempTriple.getTimestamp());
-				for(int j = 0; j < tempList.size(); j++) {
-					ComputerNode tempC = tempList.get(j);
-					C1.getOutNeighbors().add(tempC);
-					C2.getOutNeighbors().add(tempC);
-					tempC.getOutNeighbors().add(C1);
-					tempC.getOutNeighbors().add(C2);
-				}
-				tempList.add(C1);
-				tempList.add(C2);
-			}
-			// Beginning work on the actual graph, represented with a hashmap. Currently have first 5 of 7 done
-			// in section 2. Might have to think about how to do this more, as im not entirely sure as to what
-			// I am doing for this. A possible solution would be to create a graph data type with a map of
-			// neighbors on the inside. Gonna look it over in the morning to see if a fresh brain will be able to work better
-			//		-Logan
+		for(int i = 0; i < tripleList.size(); i++) { // Scan triple list, step 3
+			ComputerTriple triple = tripleList.get(i);
+			ComputerNode C1 = triple.getC1();
+			ComputerNode C2 = triple.getC2();
+			List<ComputerNode> C1Neighbors = C1.getOutNeighbors();
+			List<ComputerNode> C2Neighbors = C2.getOutNeighbors();
 			
-			if(nodeGraph.get(C1.getID()) == null) {
+			C1Neighbors.add(C2); // add directed edge from c1 to c2
+			C2Neighbors.add(C1); // add directed edge from c2 to c1
+			if(timestampGraph.get(triple.getTimestamp()) != null) {
+				List<ComputerNode> timestampList = timestampGraph.get(triple.getTimestamp()); //create new nodes in list if they dont exist
+//				for(ComputerNode node : timestampList) {
+//					C1Neighbors.add(node); //this doesn't look right, this will add every node in the timestamp list, not the computers
+//					C2Neighbors.add(node); //the computer has communicated with
+//					node.getOutNeighbors().add(C1);
+//					node.getOutNeighbors().add(C2);
+//				}
+				timestampList.add(C1);
+				timestampList.add(C2);
+			}
+			if(nodeGraph.get(C1.getID()) == null) { // create new nodes in nodeGraph if they dont already exist
 				nodeGraph.put(C1.getID(), new ArrayList<ComputerNode>());
 			}
 			if(nodeGraph.get(C2.getID()) == null) {
 				nodeGraph.put(C2.getID(), new ArrayList<ComputerNode>());
 			}
+			nodeGraph.get(C1.getID()).add(C1); //append reference to list of c1 nodes
+			nodeGraph.get(C1.getID()).add(C2); //append reference to list of c2 nodes
 			
-			nodeGraph.get(C1.getID()).add(C2);
-			nodeGraph.get(C2.getID()).add(C1);
-			nodeGraph.get(C1.getID()).add(C1);
-			nodeGraph.get(C2.getID()).add(C2);
-			
-			if(timestampGraph.get(tempTriple.getTimestamp()) == null) {
-				List<ComputerNode> tempList = new ArrayList<ComputerNode>();
-				tempList.add(C1);
-				tempList.add(C2);
-				timestampGraph.put(tempTriple.getTimestamp(), tempList);
+			for(ComputerNode node : nodeGraph.get(C1.getID())) {
+				if(C1.getID() == node.getID() && C1.getTimestamp() != node.getTimestamp()) // directed edge to the last node in the list
+					node.getOutNeighbors().add(C1);
 			}
-			for(int j = 0; j < i; j++) {
-				ComputerTriple triple = tripleList.get(j);
-				if(triple.getC1().equals(C1))
-					C1.getOutNeighbors().add(triple.getC1());
-				if(triple.getC2().equals(C2))
-					C2.getOutNeighbors().add(triple.getC2());
+			for(ComputerNode node : nodeGraph.get(C2.getID())) {
+				if(C2.getID() == node.getID() && C2.getTimestamp() != node.getTimestamp()) // directed edge to the last node in the list
+					node.getOutNeighbors().add(C2);
 			}
+				
 		}
 		
+		//TODO Test this extensively, I think this is correct, but I may be forgetting some cases..
+		
+
 	}
 	
 	
