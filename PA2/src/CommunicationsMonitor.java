@@ -108,8 +108,19 @@ public class CommunicationsMonitor {
 		// of nodes traversed. Choose either one you think will be easier (in terms
 		// of building the list, I think BFS would be better).
 		
-		//TODO
-
+		boolean c1found = false;
+		boolean c2found = false;
+		for(int i = 0; i < this.nodeGraph.size(); i++)
+		{
+			if(this.nodeGraph.getId() == c1 && this.nodeGraph.getId() == c2) {
+				if(this.nodeGraph.getTime() > x && this.nodeGraph.getTime() < y) {
+					ComputerNode c1Node = new ComputerNode(c1, x);
+					ComputerNode c2Node = new ComputerNode(c2, y);
+					return DFS(c1Node, c2Node, x, y);
+				}
+			}
+		}
+		
 		return null;
 	}
 	
@@ -120,7 +131,7 @@ public class CommunicationsMonitor {
 //	Returns a HashMap that represents the mapping between an Integer and a list of ComputerNodeobjects.
 //	The Integer represents the ID of some computer Ci, while the list consists of pairs (Ci,t1),(Ci,t2),...,(Ci,tk), 
 //	represented by ComputerNode objects, that specify that Ci has communicated with other computers at times t1,t2,...,tk. 
-//	The list for each computer must be ordered by time; i.e.,t1<t2<···<tk
+//	The list for each computer must be ordered by time; i.e.,t1<t2<ï¿½ï¿½ï¿½<tk
 	public HashMap<Integer, List<ComputerNode>> getComputerMapping(){
 		return timestampGraph;
 	}
