@@ -12,7 +12,6 @@ public class CommunicationsMonitor {
 	private List<ComputerTriple> tripleList;
 	private HashMap<Integer, List<ComputerNode>> nodeGraph; // need to create a graph of this somehow
 	
-	
 	/**
 	 * Construct a new CommunicationsMonitor object;
 	 */
