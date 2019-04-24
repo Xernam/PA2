@@ -4,8 +4,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import CommunicationsMonitor.TripleComparator;
-
 public class CommunicationsMonitor {
 	
 	private List<ComputerTriple> tripleList;
@@ -54,11 +52,12 @@ public class CommunicationsMonitor {
 			
 			C1Neighbors.add(C2); // add directed edge from c1 to c2
 			C2Neighbors.add(C1); // add directed edge from c2 to c1
-			if(timestampGraph.get(triple.getTimestamp()) != null) {
-				List<ComputerNode> timestampList = timestampGraph.get(triple.getTimestamp()); //create new nodes in list if they dont exist
-				timestampList.add(C1);
-				timestampList.add(C2);
+			if(timestampGraph.get(triple.getTimestamp()) == null) {
+				timestampGraph.put(triple.getTimestamp(), new ArrayList<ComputerNode>());
 			}
+			
+			timestampGraph.get(triple.getTimestamp()).add(C1);
+			timestampGraph.get(triple.getTimestamp()).add(C2);
 			if(nodeGraph.get(C1.getID()) == null) { // create new nodes in nodeGraph if they dont already exist
 				nodeGraph.put(C1.getID(), new ArrayList<ComputerNode>());
 			}
@@ -66,7 +65,7 @@ public class CommunicationsMonitor {
 				nodeGraph.put(C2.getID(), new ArrayList<ComputerNode>());
 			}
 			nodeGraph.get(C1.getID()).add(C1); //append reference to list of c1 nodes
-			nodeGraph.get(C1.getID()).add(C2); //append reference to list of c2 nodes
+			nodeGraph.get(C2.getID()).add(C2); //append reference to list of c2 nodes
 			
 			for(ComputerNode node : nodeGraph.get(C1.getID())) {
 				if(C1.getID() == node.getID() && C1.getTimestamp() != node.getTimestamp()) // directed edge to the last node in the list
@@ -79,7 +78,7 @@ public class CommunicationsMonitor {
 				
 		}
 		
-		//TODO Test this extensively, I think this is correct, but I may be forgetting some cases..
+		//TODO Test this extensively, I think this is correct, but I may be forgetting some cases.
 		
 
 	}
@@ -101,7 +100,8 @@ public class CommunicationsMonitor {
 		// of building the list, I think BFS would be better).
 		
 		boolean c1found = false;
-		boolean c2found = false;
+		boolean c2found = false; // you forgot to use the map to grab the list of computer nodes, just trying to grab
+								 // from the map of keys, which is invalid (this.nodeGraph.get(i).getID());
 		for(int i = 0; i < this.nodeGraph.size(); i++)
 		{
 			if(this.nodeGraph.getId() == c1 && this.nodeGraph.getId() == c2) {
@@ -133,7 +133,7 @@ public class CommunicationsMonitor {
 	
 //	Returns the list of ComputerNodeobjects associated with computer c by performing a lookup in the mapping.
 	public List<ComputerNode> getComputerMapping(int c){
-		if(timestampGraph != null)
+		if(nodeGraph != null)
 			return nodeGraph.get(c);
 		return null;
 	}
@@ -154,7 +154,7 @@ public class CommunicationsMonitor {
 		List<ComputerNode> path = new ArrayList<ComputerNode>();
 		path.add(c1);
 		path = DFSVisit(c1, c2, x, y, path);
-		if(!path.get(path.size()- 1 ).equals(c2))
+		if(!path.get(path.size() - 1 ).equals(c2))
 			return null;
 		return path;
 	}
