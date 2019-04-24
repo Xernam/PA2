@@ -1,3 +1,7 @@
+/**
+ * @author Logan Williams
+ */
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,19 +13,24 @@ public class CommunicationsMonitor {
 	private HashMap<Integer, List<ComputerNode>> nodeGraph; // need to create a graph of this somehow
 	
 	
-	//Constructor with no parameters
+	/**
+	 * Construct a new CommunicationsMonitor object;
+	 */
 	public CommunicationsMonitor() {
 		tripleList = new LinkedList<ComputerTriple>();
 		nodeGraph = null;
 	}
 	
-	
-	
-//	takes as input two integers c1,c2, and a timestamp. 
-//	This triple represents the fact that the computers withIDs c1 andc2 
-//	have communicated at the given timestamp. 
-//	This method should run in O(1)time. 
-//	Any invocation of this method after createGraph() is called will be ignored.
+	/**
+	 * takes as input two integers c1,c2, and a timestamp. 
+	 * This triple represents the fact that the computers withIDs c1 andc2 
+	 * have communicated at the given timestamp. 
+	 * This method should run in O(1)time. 
+	 * Any invocation of this method after createGraph() is called will be ignored.
+	 * @param c1
+	 * @param c2
+	 * @param timestamp
+	 */
 	public void addCommunication(int c1, int c2, int timestamp) {
 		if(nodeGraph != null)
 			return;
@@ -32,8 +41,11 @@ public class CommunicationsMonitor {
 	}
 	
 	
-//	Constructs the data structure as specified in the Section 2. 
 //	This method should run in O(n+mlogm) time.
+	/**
+	 * Constructs the data structure as specified in the Section 2
+	 * Runs in O(n+2m+mlogm) time
+	 */
 	public void createGraph() {
 		
 		tripleList.sort(new TripleComparator()); //sort the triples (step 1);
@@ -93,13 +105,20 @@ public class CommunicationsMonitor {
 		return nodeGraph;
 	}
 	
-//	Returns the list of ComputerNodeobjects associated with computer c by performing a lookup in the mapping.
+/**
+ * Returns the list of ComputerNodeobjects associated with computer c.
+ * @param c - integer the computer is stored underneath
+ * @return list of ComputerNodeobjects associated with computer c
+ */
 	public List<ComputerNode> getComputerMapping(int c){
 		if(nodeGraph != null)
 			return nodeGraph.get(c);
 		return null;
 	}
 	
+	/**
+	 * uncolors all nodes in the map
+	 */
 	private void uncolorList() {
 		for(ComputerTriple triple : tripleList) {
 			for(ComputerNode node : nodeGraph.get(triple.getC1().getID()))
@@ -109,6 +128,15 @@ public class CommunicationsMonitor {
 		}
 	}
 	
+	/**
+	 * performs a bfs search on the hashmap, starting at c1 and ending at c2
+	 * @param c1 - first computer
+	 * @param c2 - second computer
+	 * @param x - time that virus was introduced
+	 * @param y - time that c2 would have been introduced to the virus, if a c2 node exists
+	 * 			  before that time
+	 * @return - list of nodes that were traversed
+	 */
 	private List<ComputerNode> BFS(int c1, int c2, int x, int y){
 		uncolorList();
 		LinkedList<ComputerNode> queue = new LinkedList<ComputerNode>();
@@ -153,6 +181,12 @@ public class CommunicationsMonitor {
 		return null;
 	}
 
+	/**
+	 * Simple comparator that compares if a triple is less than another triple. 
+	 * Used to sort the list of triples at the beginning of creating the graph.
+	 * @author Logan Williams
+	 *
+	 */
 	class TripleComparator implements Comparator<ComputerTriple>{
 		@Override
 		public int compare(ComputerTriple c1, ComputerTriple c2) {

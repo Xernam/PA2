@@ -1,3 +1,9 @@
+/**
+ * 
+ * @author Logan Williams
+ *
+ */
+
 public class ComputerTriple {
 
 	private ComputerNode c1;
@@ -30,16 +36,11 @@ public class ComputerTriple {
 	public int getTimestamp() {
 		return timestamp;
 	}
-	
-	public int compare(ComputerTriple c) {
-		if(this.getTimestamp() < c.getTimestamp())
-			return -1;
-		else if(this.getTimestamp() > c.getTimestamp())
-			return 1;
-		else
-			return 0;
-	}
-	
+	/**
+	 * checks if a triple is equal to another triple
+	 * @param c
+	 * @return
+	 */
 	public boolean equals(ComputerTriple c) {
 		if(this.c1.getID() == c.getC1().getID() && this.c2.getID() == c.getC2().getID() &&
 		this.getTimestamp() == c.getTimestamp())
